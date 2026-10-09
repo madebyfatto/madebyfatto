@@ -1,0 +1,780 @@
+@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+:root {
+  font-family: "Albert Sans", Inter, Arial, sans-serif;
+  color: #f4f1ec;
+  background: #0a0a0a;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --background: #0a0a0a;
+  --surface: #101010;
+  --text: #f4f1ec;
+  --muted: #8e8e8e;
+  --line: #2b2b2b;
+  --alvi-surface: #170a0e;
+  --alvi-line: #3c1a23;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--background);
+  color: var(--text);
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  border: 0;
+}
+
+.site-shell {
+  width: min(100%, 1600px);
+  margin: 0 auto;
+  overflow: clip;
+}
+
+.header {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 50%;
+  display: flex;
+  width: min(100%, 1600px);
+  height: 88px;
+  padding: 0 clamp(32px, 5.55vw, 80px);
+  align-items: center;
+  justify-content: space-between;
+  transform: translateX(-50%);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+  background: color-mix(in srgb, var(--background) 88%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.brand-logo {
+  position: relative;
+  z-index: 2;
+  display: block;
+  line-height: 0;
+}
+
+.brand-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.header-logo {
+  width: 100px;
+}
+
+.desktop-nav {
+  display: flex;
+  gap: 42px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.desktop-nav a {
+  transition: color 180ms ease;
+}
+
+.desktop-nav a:hover,
+.desktop-nav a:focus-visible {
+  color: var(--text);
+}
+
+.menu-button,
+.mobile-nav {
+  display: none;
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  min-height: 92vh;
+  padding: 184px clamp(32px, 5.55vw, 80px) 72px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(16px, 2vw, 32px);
+  align-items: center;
+}
+
+.hero-content {
+  grid-column: 2 / 12;
+}
+
+.hero-title-wrap {
+  position: relative;
+}
+
+.hero-title-wrap::before {
+  position: absolute;
+  top: 52%;
+  left: -30px;
+  width: min(72%, 720px);
+  height: 1px;
+  background: #7b1f2d;
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: hero-line-in 360ms cubic-bezier(0.22, 1, 0.36, 1) 40ms forwards;
+}
+
+.hero h1 {
+  max-width: 1160px;
+  margin: 0;
+  font-size: clamp(4rem, 7.1vw, 6.8rem);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.hero h1 span,
+.hero h1 strong {
+  position: relative;
+  display: block;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.hero h1 span {
+  color: var(--muted);
+  font-weight: 400;
+  animation: hero-copy-in 380ms ease-out 120ms forwards;
+}
+
+.hero h1 strong {
+  color: var(--text);
+  font-weight: 600;
+  animation: hero-copy-in 400ms ease-out 220ms forwards;
+}
+
+.hero-support {
+  max-width: 420px;
+  margin: 54px 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: hero-copy-in 320ms ease-out 300ms forwards;
+}
+
+@keyframes hero-line-in {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes hero-copy-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-note {
+  position: absolute;
+  right: clamp(32px, 5.55vw, 80px);
+  bottom: 44px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  color: #666;
+  font-size: 0.68rem;
+}
+
+.scroll-line {
+  display: block;
+  width: 56px;
+  height: 1px;
+  background: var(--line);
+}
+
+.section {
+  display: grid;
+  padding: 150px clamp(32px, 5.55vw, 80px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(16px, 2vw, 32px);
+  border-top: 1px solid var(--line);
+}
+
+.section-heading {
+  display: grid;
+  grid-column: 1 / 5;
+  grid-template-columns: 48px 1fr;
+  align-content: start;
+}
+
+.section-index {
+  margin: 5px 0 0;
+  color: #5f5f5f;
+  font-size: 0.68rem;
+}
+
+.section-heading h2 {
+  margin: 0 0 12px;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+.section-heading div > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.products-content,
+.principles-list {
+  grid-column: 5 / 13;
+}
+
+.products-section {
+  padding-bottom: 72px;
+}
+
+.principles-section {
+  padding-top: 96px;
+}
+
+.alvi-card {
+  display: grid;
+  min-height: 520px;
+  padding: clamp(34px, 3.5vw, 52px);
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+  gap: 48px;
+  overflow: hidden;
+  border: 1px solid var(--alvi-line);
+  border-radius: 6px;
+  background: var(--alvi-surface);
+  transition:
+    transform 300ms ease,
+    border-color 300ms ease;
+}
+
+.alvi-card:hover {
+  transform: translateY(-3px);
+  border-color: #613040;
+}
+
+.alvi-copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.alvi-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.alvi-logo {
+  width: 110px;
+  height: auto;
+}
+
+.status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #c9b9bd;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+}
+
+.status > span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ff3158;
+}
+
+.alvi-message h3 {
+  max-width: 480px;
+  margin: 0 0 14px;
+  font-size: clamp(2.5rem, 3.6vw, 4.2rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.alvi-message p {
+  margin: 0;
+  color: #c9b9bd;
+  font-size: 1rem;
+}
+
+.alvi-link {
+  display: flex;
+  width: fit-content;
+  padding-bottom: 7px;
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid #6d4a53;
+  color: var(--text);
+  font-size: 0.88rem;
+  transition: border-color 180ms ease;
+}
+
+.alvi-link:hover,
+.alvi-link:focus-visible {
+  border-color: var(--text);
+}
+
+.alvi-link svg {
+  width: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.alvi-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alvi-visual::before {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border: 1px solid #3c1a23;
+  border-radius: 50%;
+  content: "";
+}
+
+.alvi-visual img {
+  position: relative;
+  z-index: 2;
+  width: min(78%, 280px);
+  height: auto;
+  border-radius: 18%;
+  box-shadow: 0 18px 54px rgb(0 0 0 / 28%);
+  transform: rotate(4deg);
+}
+
+.route-line {
+  position: absolute;
+  width: 260px;
+  height: 110px;
+  border: solid #5a2432;
+  border-width: 1px 0 0;
+  border-radius: 50%;
+}
+
+.route-line-one {
+  top: 22%;
+  left: -10%;
+  transform: rotate(18deg);
+}
+
+.route-line-two {
+  right: -18%;
+  bottom: 20%;
+  transform: rotate(-22deg);
+}
+
+.principles-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.principles-list li {
+  display: grid;
+  min-height: 138px;
+  padding: 28px 0;
+  grid-template-columns: 70px 1fr;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.principle-number {
+  color: #5f5f5f;
+  font-size: 0.68rem;
+}
+
+.principles-list p {
+  max-width: 750px;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1.35rem, 2.1vw, 2rem);
+  letter-spacing: -0.025em;
+  line-height: 1.28;
+}
+
+.principles-list strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.footer {
+  display: grid;
+  min-height: 300px;
+  padding: 72px clamp(32px, 5.55vw, 80px);
+  grid-template-columns: 4fr 5fr 3fr;
+  align-items: end;
+  border-top: 1px solid var(--line);
+}
+
+.footer-logo {
+  width: clamp(168px, 17vw, 240px);
+  align-self: start;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer-company {
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.7;
+}
+
+.footer-company p:first-child {
+  color: var(--text);
+}
+
+.copyright {
+  justify-self: end;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 5px;
+}
+
+@media (max-width: 980px) {
+  .hero-content {
+    grid-column: 1 / 13;
+  }
+
+  .section {
+    padding-top: 112px;
+    padding-bottom: 112px;
+  }
+
+  .products-section {
+    padding-bottom: 72px;
+  }
+
+  .principles-section {
+    padding-top: 88px;
+  }
+
+  .section-heading {
+    grid-column: 1 / 4;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .products-content,
+  .principles-list {
+    grid-column: 4 / 13;
+  }
+
+  .alvi-card {
+    min-height: 570px;
+    grid-template-columns: 1fr;
+  }
+
+  .alvi-visual {
+    position: absolute;
+    right: -20px;
+    bottom: 40px;
+    width: 44%;
+  }
+
+  .alvi-visual img {
+    width: 180px;
+    opacity: 0.9;
+  }
+
+  .alvi-visual::before,
+  .route-line {
+    display: none;
+  }
+
+  .alvi-message {
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 680px) {
+  html {
+    scroll-padding-top: 74px;
+  }
+
+  .header {
+    height: 72px;
+    padding: 0 24px;
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-button {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .menu-button span {
+    display: block;
+    width: 18px;
+    height: 1px;
+    background: var(--text);
+    transition: transform 180ms ease;
+  }
+
+  .menu-button[aria-expanded="true"] span:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  .menu-button[aria-expanded="true"] span:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  .mobile-nav {
+    position: absolute;
+    top: 71px;
+    right: 0;
+    left: 0;
+    display: flex;
+    padding: 26px 24px 32px;
+    flex-direction: column;
+    gap: 22px;
+    border-bottom: 1px solid var(--line);
+    background: var(--background);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  .mobile-nav.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .hero {
+    min-height: 780px;
+    padding: 142px 24px 56px;
+    align-items: start;
+  }
+
+  .hero-content {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.25rem, 14vw, 4rem);
+    line-height: 0.99;
+  }
+
+  .hero-title-wrap::before {
+    top: 56%;
+    left: -12px;
+    width: 86%;
+  }
+
+  .hero-support {
+    margin-top: auto;
+    font-size: 1rem;
+  }
+
+  .scroll-note {
+    display: none;
+  }
+
+  .section {
+    display: block;
+    padding: 94px 24px;
+  }
+
+  .products-section {
+    padding-bottom: 64px;
+  }
+
+  .principles-section {
+    padding-top: 76px;
+  }
+
+  .section-heading {
+    display: grid;
+    margin-bottom: 52px;
+    grid-template-columns: 38px 1fr;
+    gap: 0;
+  }
+
+  .section-heading h2 {
+    font-size: 1.75rem;
+  }
+
+  .alvi-card {
+    display: flex;
+    min-height: 680px;
+    padding: 28px;
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  .alvi-copy {
+    min-height: 570px;
+  }
+
+  .alvi-meta {
+    align-items: center;
+  }
+
+  .alvi-logo {
+    width: 88px;
+  }
+
+  .status {
+    font-size: 0.65rem;
+  }
+
+  .alvi-message {
+    max-width: 100%;
+    margin-top: 208px;
+  }
+
+  .alvi-message h3 {
+    font-size: clamp(2.75rem, 12vw, 3.35rem);
+  }
+
+  .alvi-visual {
+    top: 104px;
+    right: 50%;
+    bottom: auto;
+    width: auto;
+    transform: translateX(50%);
+  }
+
+  .alvi-visual img {
+    width: 158px;
+  }
+
+  .principles-list li {
+    min-height: 0;
+    padding: 30px 0 34px;
+    grid-template-columns: 38px 1fr;
+    align-items: start;
+  }
+
+  .principle-number {
+    padding-top: 5px;
+  }
+
+  .principles-list p {
+    font-size: 1.45rem;
+    line-height: 1.3;
+  }
+
+  .footer {
+    display: flex;
+    min-height: 390px;
+    padding: 56px 24px 42px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-logo {
+    width: 190px;
+  }
+
+  .footer-company {
+    margin-top: auto;
+  }
+
+  .copyright {
+    margin-top: 26px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero-title-wrap::before,
+  .hero h1 span,
+  .hero h1 strong,
+  .hero-support {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Showcases Fatto's digital products and guiding principles with a sleek, responsive one-page design that highlights innovation and clarity for users.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
