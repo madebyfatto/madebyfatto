@@ -3,12 +3,83 @@ import alviLogo from "./assets/alvi-logo-negative.png"
 import alviMark from "./assets/alvi-mark.png"
 import fattoLogo from "./assets/fatto-logo.png"
 
-const beliefs = [
-  { title: "Autonomia.", text: "Criamos para que cada pessoa tenha mais clareza e liberdade para escolher e agir." },
-  { title: "Constância.", text: "Acreditamos no progresso que acontece aos poucos e permanece." },
-  { title: "Longo prazo.", text: "Construímos soluções que continuam úteis depois que a novidade passa." },
-  { title: "Impacto real.", text: "Simplificamos o cotidiano para abrir espaço para o que importa." },
-]
+type SiteLocale = "pt-BR" | "en-US" | "es-ES" | "fr-FR" | "it-IT"
+
+const localeLabels: Record<SiteLocale, { short: string; name: string }> = {
+  "pt-BR": { short: "PT", name: "Português" },
+  "en-US": { short: "EN", name: "English" },
+  "es-ES": { short: "ES", name: "Español" },
+  "fr-FR": { short: "FR", name: "Français" },
+  "it-IT": { short: "IT", name: "Italiano" },
+}
+
+const content = {
+  "pt-BR": {
+    navigation: { products: "Produtos", vision: "Visão", openMenu: "Abrir menu", closeMenu: "Fechar menu" },
+    hero: { future: "O futuro não se prevê.", built: "Se constrói.", support: "Tecnologia para transformar intenção em progresso." },
+    products: { title: "Produtos", support: "O que estamos construindo.", status: "Em construção", plan: "Planeje.", adjust: "Ajuste.", continue: "Continue.", description: "Finanças que acompanham a vida real.", cta: "Conheça a Alvi" },
+    beliefs: [
+      { title: "Autonomia.", text: "Criamos para que cada pessoa tenha mais clareza e liberdade para escolher e agir." },
+      { title: "Constância.", text: "Acreditamos no progresso que acontece aos poucos e permanece." },
+      { title: "Longo prazo.", text: "Construímos soluções que continuam úteis depois que a novidade passa." },
+      { title: "Impacto real.", text: "Simplificamos o cotidiano para abrir espaço para o que importa." },
+    ],
+    vision: { title: "No que acreditamos", support: "O que sustenta cada produto." },
+    footer: "Tecnologia para o que vem depois.",
+  },
+  "en-US": {
+    navigation: { products: "Products", vision: "Vision", openMenu: "Open menu", closeMenu: "Close menu" },
+    hero: { future: "The future isn’t predicted.", built: "It’s built.", support: "Technology that turns intention into progress." },
+    products: { title: "Products", support: "What we’re building.", status: "In the works", plan: "Plan.", adjust: "Adjust.", continue: "Continue.", description: "Finances that keep up with real life.", cta: "Meet Alvi" },
+    beliefs: [
+      { title: "Autonomy.", text: "We build for greater clarity and freedom to choose and act." },
+      { title: "Consistency.", text: "We believe in progress that happens gradually and endures." },
+      { title: "Long term.", text: "We build solutions that remain useful after the novelty wears off." },
+      { title: "Real impact.", text: "We simplify everyday life to make room for what matters." },
+    ],
+    vision: { title: "What we believe", support: "What sustains every product." },
+    footer: "Technology for what comes next.",
+  },
+  "es-ES": {
+    navigation: { products: "Productos", vision: "Visión", openMenu: "Abrir menú", closeMenu: "Cerrar menú" },
+    hero: { future: "El futuro no se predice.", built: "Se construye.", support: "Tecnología para transformar la intención en progreso." },
+    products: { title: "Productos", support: "Lo que estamos construyendo.", status: "En desarrollo", plan: "Planifica.", adjust: "Ajusta.", continue: "Continúa.", description: "Finanzas que acompañan la vida real.", cta: "Conoce Alvi" },
+    beliefs: [
+      { title: "Autonomía.", text: "Creamos para que cada persona tenga más claridad y libertad para elegir y actuar." },
+      { title: "Constancia.", text: "Creemos en el progreso que sucede poco a poco y permanece." },
+      { title: "Largo plazo.", text: "Construimos soluciones que siguen siendo útiles cuando pasa la novedad." },
+      { title: "Impacto real.", text: "Simplificamos el día a día para abrir espacio a lo que importa." },
+    ],
+    vision: { title: "En lo que creemos", support: "Lo que sostiene cada producto." },
+    footer: "Tecnología para lo que viene después.",
+  },
+  "fr-FR": {
+    navigation: { products: "Produits", vision: "Vision", openMenu: "Ouvrir le menu", closeMenu: "Fermer le menu" },
+    hero: { future: "L’avenir ne se prédit pas.", built: "Il se construit.", support: "La technologie qui transforme l’intention en progrès." },
+    products: { title: "Produits", support: "Ce que nous construisons.", status: "En construction", plan: "Planifiez.", adjust: "Ajustez.", continue: "Continuez.", description: "Des finances qui suivent le rythme de la vraie vie.", cta: "Découvrir Alvi" },
+    beliefs: [
+      { title: "Autonomie.", text: "Nous créons pour que chacun ait plus de clarté et de liberté pour choisir et agir." },
+      { title: "Constance.", text: "Nous croyons au progrès qui se fait peu à peu et qui dure." },
+      { title: "Long terme.", text: "Nous construisons des solutions qui restent utiles une fois la nouveauté passée." },
+      { title: "Impact réel.", text: "Nous simplifions le quotidien pour faire de la place à ce qui compte." },
+    ],
+    vision: { title: "Ce en quoi nous croyons", support: "Ce qui soutient chaque produit." },
+    footer: "La technologie pour la suite.",
+  },
+  "it-IT": {
+    navigation: { products: "Prodotti", vision: "Visione", openMenu: "Apri menu", closeMenu: "Chiudi menu" },
+    hero: { future: "Il futuro non si prevede.", built: "Si costruisce.", support: "Tecnologia per trasformare l’intenzione in progresso." },
+    products: { title: "Prodotti", support: "Ciò che stiamo costruendo.", status: "In costruzione", plan: "Pianifica.", adjust: "Adatta.", continue: "Continua.", description: "Finanze che seguono la vita reale.", cta: "Scopri Alvi" },
+    beliefs: [
+      { title: "Autonomia.", text: "Creiamo perché ogni persona abbia più chiarezza e libertà di scegliere e agire." },
+      { title: "Costanza.", text: "Crediamo nel progresso che avviene poco alla volta e dura." },
+      { title: "Lungo termine.", text: "Costruiamo soluzioni che restano utili anche quando la novità passa." },
+      { title: "Impatto reale.", text: "Semplifichiamo il quotidiano per fare spazio a ciò che conta." },
+    ],
+    vision: { title: "Ciò in cui crediamo", support: "Ciò che sostiene ogni prodotto." },
+    footer: "Tecnologia per ciò che viene dopo.",
+  },
+} as const
 
 function ArrowIcon() {
   return (
@@ -21,6 +92,10 @@ function ArrowIcon() {
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [heroReady, setHeroReady] = useState(false)
+  const [siteLocale, setSiteLocale] = useState<SiteLocale>("pt-BR")
+  const [languageOpen, setLanguageOpen] = useState(false)
+  const copy = content[siteLocale]
+  const beliefs = copy.beliefs
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => setHeroReady(true))
@@ -44,20 +119,60 @@ export default function App() {
     return () => observer.disconnect()
   }, [])
 
-  const closeMenu = () => setMenuOpen(false)
+  const closeMenu = () => {
+    setMenuOpen(false)
+    setLanguageOpen(false)
+  }
+  const selectLocale = (locale: SiteLocale) => {
+    setSiteLocale(locale)
+    setLanguageOpen(false)
+    closeMenu()
+  }
+
+  const LanguagePicker = ({ mobile = false }: { mobile?: boolean }) => (
+    <div className={`fatto-language-picker ${mobile ? "is-mobile" : ""} ${languageOpen ? "is-open" : ""}`}>
+      <button
+        className="fatto-language-trigger"
+        type="button"
+        aria-expanded={languageOpen}
+        aria-haspopup="menu"
+        aria-label="Select language"
+        onClick={() => setLanguageOpen((open) => !open)}
+      >
+        <span>{localeLabels[siteLocale].short}</span>
+        <span className="fatto-language-chevron" aria-hidden="true" />
+      </button>
+      <div className="fatto-language-options" role="menu">
+        {(Object.entries(localeLabels) as [SiteLocale, { short: string; name: string }][]).map(([locale, label]) => (
+          <button
+            key={locale}
+            type="button"
+            role="menuitemradio"
+            aria-checked={siteLocale === locale}
+            className={siteLocale === locale ? "is-active" : ""}
+            onClick={() => selectLocale(locale)}
+          >
+            <span>{label.name}</span>
+            <span>{label.short}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
 
   return (
-    <div className={`fatto-site ${heroReady ? "is-ready" : ""}`}>
+    <div className={`fatto-site ${heroReady ? "is-ready" : ""}`} lang={siteLocale}>
       <style>{styles}</style>
 
       <header className="fatto-header">
-        <a className="fatto-header-logo" href="#inicio" aria-label="Fatto — início">
+        <a className="fatto-header-logo" href="#inicio" aria-label={siteLocale === "en-US" ? "Fatto home" : "Fatto — início"}>
           <img src={fattoLogo} alt="Fatto" />
         </a>
 
-        <nav className="fatto-desktop-nav" aria-label="Navegação principal">
-          <a href="#produtos">Produtos</a>
-          <a href="#visao">Visão</a>
+        <nav className="fatto-desktop-nav" aria-label={siteLocale === "en-US" ? "Main navigation" : "Navegação principal"}>
+          <a href="#produtos">{copy.navigation.products}</a>
+          <a href="#visao">{copy.navigation.vision}</a>
+          <LanguagePicker />
         </nav>
 
         <button
@@ -65,7 +180,7 @@ export default function App() {
           type="button"
           aria-expanded={menuOpen}
           aria-controls="fatto-mobile-navigation"
-          aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+          aria-label={menuOpen ? copy.navigation.closeMenu : copy.navigation.openMenu}
           onClick={() => setMenuOpen((open) => !open)}
         >
           <span />
@@ -76,10 +191,11 @@ export default function App() {
         <nav
           id="fatto-mobile-navigation"
           className={`fatto-mobile-nav ${menuOpen ? "is-open" : ""}`}
-          aria-label="Navegação móvel"
+          aria-label={siteLocale === "en-US" ? "Mobile navigation" : "Navegação móvel"}
         >
-          <a href="#produtos" onClick={closeMenu}>Produtos</a>
-          <a href="#visao" onClick={closeMenu}>Visão</a>
+          <a href="#produtos" onClick={closeMenu}>{copy.navigation.products}</a>
+          <a href="#visao" onClick={closeMenu}>{copy.navigation.vision}</a>
+          <LanguagePicker mobile />
         </nav>
       </header>
 
@@ -95,10 +211,10 @@ export default function App() {
             </div>
 
             <h1 id="hero-title" className="fatto-hero-title">
-              <span className="fatto-hero-line fatto-hero-line-muted"><span>O futuro não se prevê.</span></span>
-              <span className="fatto-hero-line fatto-hero-line-main"><strong>Se constrói.</strong></span>
+              <span className="fatto-hero-line fatto-hero-line-muted"><span>{copy.hero.future}</span></span>
+              <span className="fatto-hero-line fatto-hero-line-main"><strong>{copy.hero.built}</strong></span>
             </h1>
-            <p className="fatto-hero-support">Tecnologia para transformar intenção em progresso.</p>
+            <p className="fatto-hero-support">{copy.hero.support}</p>
           </div>
         </section>
 
@@ -106,25 +222,25 @@ export default function App() {
           <div className="fatto-section-heading" data-reveal>
             <p className="fatto-section-index">01</p>
             <div>
-              <h2 id="products-title">Produtos</h2>
-              <p>O que estamos construindo.</p>
+              <h2 id="products-title">{copy.products.title}</h2>
+              <p>{copy.products.support}</p>
             </div>
           </div>
 
           <article className="fatto-alvi-card" id="alvi" data-reveal>
             <img className="fatto-alvi-logo" src={alviLogo} alt="Alvi" />
             <div className="fatto-alvi-copy">
-              <span className="fatto-status"><span aria-hidden="true" />Em construção</span>
+              <span className="fatto-status"><span aria-hidden="true" />{copy.products.status}</span>
               <div className="fatto-alvi-message">
                 <h3>
-                  <span>Planeje.</span>
-                  <span>Ajuste.</span>
-                  <span>Continue.</span>
+                  <span>{copy.products.plan}</span>
+                  <span>{copy.products.adjust}</span>
+                  <span>{copy.products.continue}</span>
                 </h3>
-                <p>Finanças que acompanham a vida real.</p>
+                <p>{copy.products.description}</p>
               </div>
               <a className="fatto-alvi-link" href="#alvi" onClick={(event) => event.preventDefault()}>
-                Conheça a Alvi <ArrowIcon />
+                {copy.products.cta} <ArrowIcon />
               </a>
             </div>
             <div className="fatto-alvi-visual" aria-hidden="true">
@@ -140,8 +256,8 @@ export default function App() {
           <div className="fatto-section-heading" data-reveal>
             <p className="fatto-section-index">02</p>
             <div>
-              <h2 id="beliefs-title">No que acreditamos</h2>
-              <p>O que sustenta cada produto.</p>
+              <h2 id="beliefs-title">{copy.vision.title}</h2>
+              <p>{copy.vision.support}</p>
             </div>
           </div>
 
@@ -159,7 +275,7 @@ export default function App() {
       <footer className="fatto-footer">
         <div className="fatto-footer-company">
           <p>Fatto Tecnologia Ltda.</p>
-          <p>Tecnologia para o que vem depois.</p>
+          <p>{copy.footer}</p>
         </div>
         <p className="fatto-copyright">© 2026</p>
       </footer>
@@ -237,6 +353,18 @@ const styles = `
 
   .fatto-desktop-nav a:hover, .fatto-mobile-nav a:hover, .fatto-mobile-nav a:focus-visible { color: #ff7892; }
   .fatto-desktop-nav a:hover::before { opacity: 1; transform: scale(1); }
+
+  .fatto-language-picker { position: relative; z-index: 30; margin-left: -24px; }
+  .fatto-language-trigger { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 11px; font-weight: 520; letter-spacing: .06em; cursor: pointer; transition: color 180ms ease; }
+  .fatto-language-trigger:hover, .fatto-language-trigger:focus-visible, .fatto-language-picker.is-open .fatto-language-trigger { color: var(--text); }
+  .fatto-language-chevron { width: 6px; height: 6px; margin-top: -3px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(45deg); transition: transform 180ms ease; }
+  .fatto-language-picker.is-open .fatto-language-chevron { margin-top: 3px; transform: rotate(225deg); }
+  .fatto-language-options { position: absolute; top: calc(100% + 10px); right: -12px; display: grid; width: 156px; padding: 6px; border: 1px solid #2a292c; border-radius: 10px; background: #141414; box-shadow: 0 18px 38px rgba(0, 0, 0, .32); opacity: 0; pointer-events: none; transform: translateY(-5px); transition: opacity 180ms ease, transform 180ms ease; }
+  .fatto-language-picker.is-open .fatto-language-options { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .fatto-language-options button { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 9px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); font: inherit; font-size: 12px; letter-spacing: -.01em; text-align: left; cursor: pointer; transition: color 160ms ease, background 160ms ease; }
+  .fatto-language-options button > span:last-child { color: var(--quiet); font-size: 10px; font-weight: 520; letter-spacing: .06em; }
+  .fatto-language-options button:hover, .fatto-language-options button:focus-visible { background: #202024; color: var(--text); }
+  .fatto-language-options button.is-active { color: var(--accent-soft); }
 
   .fatto-menu-button, .fatto-mobile-nav { display: none; }
 
@@ -419,10 +547,15 @@ const styles = `
     .fatto-menu-button[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     .fatto-mobile-nav { position: absolute; z-index: 1; top: 67px; right: 0; left: 0; display: grid; gap: 6px; max-height: 0; padding: 0 28px; overflow: hidden; border-bottom: 1px solid transparent; background: #0d0d0d; opacity: 0; transition: max-height 260ms ease, padding 260ms ease, opacity 180ms ease, border-color 260ms ease; }
-    .fatto-mobile-nav.is-open { max-height: 156px; padding-block: 18px 22px; border-color: var(--line); opacity: 1; }
+    .fatto-mobile-nav.is-open { max-height: 390px; padding-block: 18px 22px; border-color: var(--line); opacity: 1; }
     .fatto-mobile-nav a { position: relative; padding: 10px 0 10px 16px; color: var(--muted); font-size: 18px; }
     .fatto-mobile-nav a::before { position: absolute; top: 50%; left: 0; width: 6px; height: 6px; border-radius: 99px; background: var(--accent); content: ""; opacity: 0; transform: translateY(-50%) scale(0); transition: opacity 180ms ease, transform 180ms ease; }
     .fatto-mobile-nav a:hover::before, .fatto-mobile-nav a:focus-visible::before { opacity: 1; transform: translateY(-50%) scale(1); }
+    .fatto-language-picker.is-mobile { margin: 0; padding: 10px 0 0 16px; }
+    .fatto-language-picker.is-mobile .fatto-language-trigger { font-size: 12px; }
+    .fatto-language-picker.is-mobile .fatto-language-options { position: static; width: min(100%, 220px); max-height: 0; margin-top: 0; padding: 0; overflow: hidden; border: 0; border-radius: 0; background: transparent; box-shadow: none; opacity: 0; transform: none; transition: max-height 220ms ease, margin 220ms ease, opacity 180ms ease; }
+    .fatto-language-picker.is-mobile.is-open .fatto-language-options { max-height: 240px; margin-top: 8px; opacity: 1; }
+    .fatto-language-picker.is-mobile .fatto-language-options button { padding: 8px 0; }
 
     .fatto-hero { min-height: auto; align-items: flex-start; padding: 56px 22px 68px; }
     .fatto-hero-inner { padding: 0 0 0 22px; }
