@@ -4,10 +4,10 @@ import alviMark from "./assets/alvi-mark.png"
 import fattoLogo from "./assets/fatto-logo.png"
 
 const beliefs = [
-  { title: "Autonomia.", text: "Criamos para ampliar a capacidade de escolha e ação de quem usa." },
+  { title: "Autonomia.", text: "Criamos para que cada pessoa tenha mais clareza e liberdade para escolher e agir." },
   { title: "Constância.", text: "Acreditamos no progresso que acontece aos poucos e permanece." },
-  { title: "Longo prazo.", text: "Construímos coisas que continuam úteis depois que a novidade passa." },
-  { title: "Impacto real.", text: "Criamos tecnologia para reduzir os atritos do cotidiano e abrir espaço para o que importa." },
+  { title: "Longo prazo.", text: "Construímos soluções que continuam úteis depois que a novidade passa." },
+  { title: "Impacto real.", text: "Simplificamos o cotidiano para abrir espaço para o que importa." },
 ]
 
 function ArrowIcon() {
@@ -425,17 +425,18 @@ const styles = `
     .fatto-mobile-nav a:hover::before, .fatto-mobile-nav a:focus-visible::before { opacity: 1; transform: translateY(-50%) scale(1); }
 
     .fatto-hero { min-height: auto; align-items: flex-start; padding: 56px 22px 68px; }
-    .fatto-hero-inner { padding-top: 34px; }
-    .fatto-hero-title { max-width: none; font-size: clamp(31px, 8.8vw, 36px); line-height: .94; }
+    .fatto-hero-inner { padding: 0 0 0 22px; }
+    .fatto-hero-title { max-width: none; font-size: clamp(29px, 8vw, 33px); line-height: .96; }
+    .fatto-hero-line-main { margin-top: .13em; }
     .fatto-hero-line-muted > span { white-space: nowrap; }
-    .fatto-hero-support { max-width: 310px; margin-top: 22px; font-size: 16px; line-height: 1.35; }
-    .fatto-hero-signal { top: 0; left: 0; width: 100%; height: 14px; }
-    .fatto-hero-signal-line { top: 50%; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(255, 29, 67, .42) 12%, var(--accent) 27%, var(--accent) 73%, rgba(255, 29, 67, .42) 88%, transparent 100%); transform: scaleX(0); transform-origin: left; }
-    .fatto-hero-signal-dot { top: 50%; left: 0; width: 8px; height: 8px; transform: translate(-50%, -50%); }
-    .fatto-hero-signal-dot-one { top: 50%; left: 26%; }
-    .fatto-hero-signal-dot-two { top: 50%; right: auto; left: 74%; }
+    .fatto-hero-support { max-width: 310px; margin-top: 14px; font-size: 16px; line-height: 1.35; }
+    .fatto-hero-signal { top: 4px; left: -16px; width: 14px; height: 126px; }
+    .fatto-hero-signal-line { top: 0; left: 50%; width: 1px; height: 100%; background: linear-gradient(180deg, transparent 0%, rgba(255, 29, 67, .42) 14%, var(--accent) 28%, var(--accent) 72%, rgba(255, 29, 67, .42) 86%, transparent 100%); transform: scaleY(0); transform-origin: top; }
+    .fatto-hero-signal-dot { top: 50%; left: 50%; width: 8px; height: 8px; transform: translate(-50%, -50%); }
+    .fatto-hero-signal-dot-one { top: 26%; left: 50%; }
+    .fatto-hero-signal-dot-two { top: 74%; right: auto; left: 50%; }
     .fatto-hero-signal-dot-three, .fatto-hero-signal-dot-four { display: none; }
-    .is-ready .fatto-hero-signal-line { transform: scaleX(1); }
+    .is-ready .fatto-hero-signal-line { transform: scaleY(1); }
 
     .fatto-section { gap: 30px; padding: 58px 22px; }
     .fatto-section-heading { display: block; }
@@ -476,6 +477,6 @@ const styles = `
   }
 
   @media (max-width: 620px) and (prefers-reduced-motion: reduce) {
-    .fatto-hero-signal-line { transform: scaleX(1); }
+    .fatto-hero-signal-line { transform: scaleY(1); }
   }
 `
