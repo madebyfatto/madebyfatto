@@ -11,6 +11,12 @@ type Clarity = (...args: unknown[]) => void
 const GA_MEASUREMENT_ID = "G-XXXXXXXXXX"
 const CLARITY_PROJECT_ID = "XXXXXXXXXX"
 const CONSENT_STORAGE_KEY = "fatto-analytics-consent"
+const COOKIE_PREFERENCES_STORAGE_KEY = "fatto-cookie-preferences"
+
+type CookiePreferences = {
+  analytics: boolean
+  marketing: boolean
+}
 
 declare global {
   interface Window {
@@ -44,6 +50,32 @@ function saveConsent(consent: AnalyticsConsent) {
 
   try {
     window.localStorage.setItem(CONSENT_STORAGE_KEY, consent)
+  } catch {
+    // The page remains fully usable when browser storage is unavailable.
+  }
+}
+
+function getStoredCookiePreferences(): CookiePreferences {
+  const fallback = { analytics: getStoredConsent() === "granted", marketing: false }
+  if (!isBrowser()) return fallback
+
+  try {
+    const stored = window.localStorage.getItem(COOKIE_PREFERENCES_STORAGE_KEY)
+    if (!stored) return fallback
+
+    const preferences = JSON.parse(stored) as Partial<CookiePreferences>
+    if (typeof preferences.analytics !== "boolean" || typeof preferences.marketing !== "boolean") return fallback
+    return { analytics: preferences.analytics, marketing: preferences.marketing }
+  } catch {
+    return fallback
+  }
+}
+
+function saveCookiePreferences(preferences: CookiePreferences) {
+  if (!isBrowser()) return
+
+  try {
+    window.localStorage.setItem(COOKIE_PREFERENCES_STORAGE_KEY, JSON.stringify(preferences))
   } catch {
     // The page remains fully usable when browser storage is unavailable.
   }
@@ -159,7 +191,7 @@ const content = {
     vision: { title: "No que acreditamos", support: "O que sustenta cada produto." },
     footer: "Tecnologia para o que vem depois.",
     consent: {
-      settings: "Preferências de cookies", dialog: "Preferências de cookies", preferencesIntro: "Cookies necessários mantêm o site funcionando. Você pode escolher se também quer permitir cookies de análise.", analyticsTitle: "Cookies de análise", analyticsDescription: "Ajudam a entender como o site é utilizado.", back: "Voltar", save: "Salvar preferências", message: "Usamos cookies necessários para o site funcionar e, se você permitir, cookies de análise para entender como ele é utilizado e melhorar sua experiência. Você pode mudar sua escolha quando quiser.", customize: "Personalizar", reject: "Rejeitar não necessários", accept: "Aceitar todos",
+      settings: "Preferências de cookies", dialog: "Preferências de cookies", preferencesIntro: "Escolha quais cookies deseja permitir. Os necessários ficam sempre ativos para que o site funcione.", requiredTitle: "Cookies necessários", requiredDescription: "Sessão, segurança e suas preferências. Sempre ativos.", analyticsTitle: "Cookies de análise", analyticsDescription: "Ajudam a entender como o site é utilizado.", marketingTitle: "Cookies de marketing", marketingDescription: "Medem o desempenho de campanhas.", back: "Voltar", save: "Salvar preferências", message: "Usamos cookies necessários para o site funcionar e, se você permitir, cookies de análise para entender como ele é utilizado e melhorar sua experiência. Você pode mudar sua escolha quando quiser.", customize: "Personalizar", reject: "Rejeitar não necessários", accept: "Aceitar todos",
     },
   },
   "en-US": {
@@ -175,7 +207,7 @@ const content = {
     vision: { title: "What we believe", support: "What sustains every product." },
     footer: "Technology for what comes next.",
     consent: {
-      settings: "Cookie preferences", dialog: "Cookie preferences", preferencesIntro: "Essential cookies keep the site working. You can choose whether to also allow analytics cookies.", analyticsTitle: "Analytics cookies", analyticsDescription: "Help us understand how the site is used.", back: "Back", save: "Save preferences", message: "We use essential cookies to keep the site working and, with your permission, analytics cookies to understand how it is used and improve your experience. You can change your choice at any time.", customize: "Customize", reject: "Reject non-essential", accept: "Accept all",
+      settings: "Cookie preferences", dialog: "Cookie preferences", preferencesIntro: "Choose which cookies you want to allow. Essential cookies always stay active so the site can work.", requiredTitle: "Essential cookies", requiredDescription: "Session, security and your preferences. Always active.", analyticsTitle: "Analytics cookies", analyticsDescription: "Help us understand how the site is used.", marketingTitle: "Marketing cookies", marketingDescription: "Measure campaign performance.", back: "Back", save: "Save preferences", message: "We use essential cookies to keep the site working and, with your permission, analytics cookies to understand how it is used and improve your experience. You can change your choice at any time.", customize: "Customize", reject: "Reject non-essential", accept: "Accept all",
     },
   },
   "es-ES": {
@@ -191,7 +223,7 @@ const content = {
     vision: { title: "En lo que creemos", support: "Lo que sostiene cada producto." },
     footer: "Tecnología para lo que viene después.",
     consent: {
-      settings: "Preferencias de cookies", dialog: "Preferencias de cookies", preferencesIntro: "Las cookies necesarias mantienen el sitio funcionando. Puedes elegir si también permites las cookies de análisis.", analyticsTitle: "Cookies de análisis", analyticsDescription: "Ayudan a entender cómo se utiliza el sitio.", back: "Volver", save: "Guardar preferencias", message: "Usamos cookies necesarias para que el sitio funcione y, si lo permites, cookies de análisis para entender cómo se utiliza y mejorar tu experiencia. Puedes cambiar tu elección cuando quieras.", customize: "Personalizar", reject: "Rechazar no necesarias", accept: "Aceptar todas",
+      settings: "Preferencias de cookies", dialog: "Preferencias de cookies", preferencesIntro: "Elige qué cookies quieres permitir. Las necesarias siempre permanecen activas para que el sitio funcione.", requiredTitle: "Cookies necesarias", requiredDescription: "Sesión, seguridad y tus preferencias. Siempre activas.", analyticsTitle: "Cookies de análisis", analyticsDescription: "Ayudan a entender cómo se utiliza el sitio.", marketingTitle: "Cookies de marketing", marketingDescription: "Miden el rendimiento de las campañas.", back: "Volver", save: "Guardar preferencias", message: "Usamos cookies necesarias para que el sitio funcione y, si lo permites, cookies de análisis para entender cómo se utiliza y mejorar tu experiencia. Puedes cambiar tu elección cuando quieras.", customize: "Personalizar", reject: "Rechazar no necesarias", accept: "Aceptar todas",
     },
   },
   "fr-FR": {
@@ -207,7 +239,7 @@ const content = {
     vision: { title: "Ce en quoi nous croyons", support: "Ce qui soutient chaque produit." },
     footer: "La technologie pour la suite.",
     consent: {
-      settings: "Préférences de cookies", dialog: "Préférences de cookies", preferencesIntro: "Les cookies nécessaires permettent au site de fonctionner. Vous pouvez aussi choisir d’autoriser les cookies d’analyse.", analyticsTitle: "Cookies d’analyse", analyticsDescription: "Ils nous aident à comprendre comment le site est utilisé.", back: "Retour", save: "Enregistrer les préférences", message: "Nous utilisons des cookies nécessaires au fonctionnement du site et, avec votre accord, des cookies d’analyse pour comprendre son utilisation et améliorer votre expérience. Vous pouvez modifier votre choix à tout moment.", customize: "Personnaliser", reject: "Refuser les non essentiels", accept: "Tout accepter",
+      settings: "Préférences de cookies", dialog: "Préférences de cookies", preferencesIntro: "Choisissez les cookies que vous souhaitez autoriser. Les cookies nécessaires restent toujours actifs pour le bon fonctionnement du site.", requiredTitle: "Cookies nécessaires", requiredDescription: "Session, sécurité et vos préférences. Toujours actifs.", analyticsTitle: "Cookies d’analyse", analyticsDescription: "Ils nous aident à comprendre comment le site est utilisé.", marketingTitle: "Cookies marketing", marketingDescription: "Ils mesurent les performances des campagnes.", back: "Retour", save: "Enregistrer les préférences", message: "Nous utilisons des cookies nécessaires au fonctionnement du site et, avec votre accord, des cookies d’analyse pour comprendre son utilisation et améliorer votre expérience. Vous pouvez modifier votre choix à tout moment.", customize: "Personnaliser", reject: "Refuser les non essentiels", accept: "Tout accepter",
     },
   },
   "it-IT": {
@@ -223,7 +255,7 @@ const content = {
     vision: { title: "Ciò in cui crediamo", support: "Ciò che sostiene ogni prodotto." },
     footer: "Tecnologia per ciò che viene dopo.",
     consent: {
-      settings: "Preferenze sui cookie", dialog: "Preferenze sui cookie", preferencesIntro: "I cookie necessari mantengono il sito funzionante. Puoi scegliere se consentire anche i cookie analitici.", analyticsTitle: "Cookie analitici", analyticsDescription: "Ci aiutano a capire come viene utilizzato il sito.", back: "Indietro", save: "Salva preferenze", message: "Utilizziamo i cookie necessari per il funzionamento del sito e, con il tuo consenso, i cookie analitici per capire come viene utilizzato e migliorare la tua esperienza. Puoi modificare la tua scelta in qualsiasi momento.", customize: "Personalizza", reject: "Rifiuta i non necessari", accept: "Accetta tutti",
+      settings: "Preferenze sui cookie", dialog: "Preferenze sui cookie", preferencesIntro: "Scegli quali cookie desideri consentire. Quelli necessari restano sempre attivi per il funzionamento del sito.", requiredTitle: "Cookie necessari", requiredDescription: "Sessione, sicurezza e le tue preferenze. Sempre attivi.", analyticsTitle: "Cookie analitici", analyticsDescription: "Ci aiutano a capire come viene utilizzato il sito.", marketingTitle: "Cookie di marketing", marketingDescription: "Misurano le prestazioni delle campagne.", back: "Indietro", save: "Salva preferenze", message: "Utilizziamo i cookie necessari per il funzionamento del sito e, con il tuo consenso, i cookie analitici per capire come viene utilizzato e migliorare la tua esperienza. Puoi modificare la tua scelta in qualsiasi momento.", customize: "Personalizza", reject: "Rifiuta i non necessari", accept: "Accetta tutti",
     },
   },
 } as const
@@ -244,7 +276,7 @@ export default function App() {
   const [analyticsConsent, setAnalyticsConsent] = useState<AnalyticsConsent | null>(() => getStoredConsent())
   const [consentBannerOpen, setConsentBannerOpen] = useState(() => getStoredConsent() === null)
   const [cookiePreferencesOpen, setCookiePreferencesOpen] = useState(() => getStoredConsent() !== null)
-  const [analyticsCookiesAllowed, setAnalyticsCookiesAllowed] = useState(() => getStoredConsent() === "granted")
+  const [cookiePreferences, setCookiePreferences] = useState<CookiePreferences>(() => getStoredCookiePreferences())
   const copy = content[siteLocale]
   const beliefs = copy.beliefs
 
@@ -278,15 +310,18 @@ export default function App() {
     setMenuOpen(false)
     setLanguageOpen(false)
   }
-  const updateAnalyticsConsent = (consent: AnalyticsConsent, reopenInPreferences = false) => {
+  const updateCookiePreferences = (preferences: CookiePreferences, reopenInPreferences = false) => {
+    const consent: AnalyticsConsent = preferences.analytics ? "granted" : "denied"
     saveConsent(consent)
+    saveCookiePreferences(preferences)
     setAnalyticsConsent(consent)
-    setAnalyticsCookiesAllowed(consent === "granted")
+    setCookiePreferences(preferences)
     setCookiePreferencesOpen(reopenInPreferences)
     setConsentBannerOpen(false)
   }
   const openCookiePreferences = () => {
-    setAnalyticsCookiesAllowed(analyticsConsent === "granted")
+    setCookiePreferences(getStoredCookiePreferences())
+    setCookiePreferencesOpen(true)
     setConsentBannerOpen(true)
   }
   const selectLocale = (locale: SiteLocale) => {
@@ -466,24 +501,40 @@ export default function App() {
               <div className="fatto-consent-copy">
                 <p>{copy.consent.preferencesIntro}</p>
               </div>
-              <div className="fatto-cookie-choice">
-                <div>
-                  <strong>{copy.consent.analyticsTitle}</strong>
-                  <span>{copy.consent.analyticsDescription}</span>
-                </div>
-                <button
-                  className={analyticsCookiesAllowed ? "is-enabled" : ""}
-                  type="button"
-                  role="switch"
-                  aria-checked={analyticsCookiesAllowed}
-                  onClick={() => setAnalyticsCookiesAllowed((allowed) => !allowed)}
-                >
-                  <span />
-                </button>
+              <div className="fatto-cookie-options">
+                <label className="fatto-cookie-option is-required">
+                  <input type="checkbox" checked disabled />
+                  <span>
+                    <strong>{copy.consent.requiredTitle}</strong>
+                    <small>{copy.consent.requiredDescription}</small>
+                  </span>
+                </label>
+                <label className="fatto-cookie-option">
+                  <input
+                    type="checkbox"
+                    checked={cookiePreferences.analytics}
+                    onChange={(event) => setCookiePreferences((preferences) => ({ ...preferences, analytics: event.target.checked }))}
+                  />
+                  <span>
+                    <strong>{copy.consent.analyticsTitle}</strong>
+                    <small>{copy.consent.analyticsDescription}</small>
+                  </span>
+                </label>
+                <label className="fatto-cookie-option">
+                  <input
+                    type="checkbox"
+                    checked={cookiePreferences.marketing}
+                    onChange={(event) => setCookiePreferences((preferences) => ({ ...preferences, marketing: event.target.checked }))}
+                  />
+                  <span>
+                    <strong>{copy.consent.marketingTitle}</strong>
+                    <small>{copy.consent.marketingDescription}</small>
+                  </span>
+                </label>
               </div>
               <div className="fatto-consent-actions is-preferences">
                 <button className="fatto-consent-decline" type="button" onClick={() => setCookiePreferencesOpen(false)}>{copy.consent.back}</button>
-                <button className="fatto-consent-accept" type="button" onClick={() => updateAnalyticsConsent(analyticsCookiesAllowed ? "granted" : "denied", true)}>{copy.consent.save}</button>
+                <button className="fatto-consent-accept" type="button" onClick={() => updateCookiePreferences(cookiePreferences, true)}>{copy.consent.save}</button>
               </div>
             </>
           ) : (
@@ -493,8 +544,8 @@ export default function App() {
               </div>
               <div className="fatto-consent-actions">
                 <button className="fatto-consent-decline" type="button" onClick={openCookiePreferences}>{copy.consent.customize}</button>
-                <button className="fatto-consent-decline" type="button" onClick={() => updateAnalyticsConsent("denied")}>{copy.consent.reject}</button>
-                <button className="fatto-consent-accept" type="button" onClick={() => updateAnalyticsConsent("granted")}>{copy.consent.accept}</button>
+                <button className="fatto-consent-decline" type="button" onClick={() => updateCookiePreferences({ analytics: false, marketing: false })}>{copy.consent.reject}</button>
+                <button className="fatto-consent-accept" type="button" onClick={() => updateCookiePreferences({ analytics: true, marketing: true })}>{copy.consent.accept}</button>
               </div>
             </>
           )}
@@ -785,8 +836,6 @@ const styles = `
   .fatto-beliefs-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0 0 0 clamp(48px, 4vw, 76px); padding: 0; list-style: none; }
   .fatto-beliefs-list li { display: flex; min-height: 0; flex-direction: column; gap: 0; padding: clamp(22px, 1.8vw, 28px); border: 1px solid #202024; border-radius: 16px; background: #121212; }
   .fatto-beliefs-list li > span { color: var(--quiet); font-size: 13px; font-variant-numeric: tabular-nums; }
-  .fatto-beliefs-list p { margin: 10px 0 0; color: var(--muted); font-size: clamp(24px, 2.25vw, 38px); font-weight: 420; letter-spacing: -0.06em; line-height: 1.12; }
-  .fatto-beliefs-list strong { color: var(--text); font-weight: 620; }
   .fatto-beliefs-list p { margin: 10px 0 0; color: var(--muted); font-size: clamp(20px, 1.75vw, 29px); font-weight: 500; letter-spacing: -0.055em; line-height: 1.12; }
   .fatto-beliefs-list strong { color: var(--text); font-weight: 650; }
 
@@ -799,24 +848,26 @@ const styles = `
 
   .fatto-privacy-settings { position: fixed; z-index: 50; right: 20px; bottom: 20px; padding: 8px 11px; border: 1px solid #2a292c; border-radius: 999px; background: rgba(20, 20, 20, .92); color: var(--muted); font: inherit; font-size: 11px; letter-spacing: -.01em; cursor: pointer; backdrop-filter: blur(12px); transition: border-color 180ms ease, color 180ms ease, background 180ms ease; }
   .fatto-privacy-settings:hover, .fatto-privacy-settings:focus-visible { border-color: #4a474d; background: #1a1a1a; color: var(--text); }
-  .fatto-consent-banner { position: fixed; z-index: 51; right: 24px; bottom: 24px; display: grid; width: min(400px, calc(100vw - 48px)); gap: 18px; padding: 20px; border: 1px solid #2a292c; border-radius: 16px; background: rgba(20, 20, 20, .98); box-shadow: 0 18px 48px rgba(0, 0, 0, .34); backdrop-filter: blur(16px); }
-  .fatto-consent-copy p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; letter-spacing: -.02em; }
+  .fatto-consent-banner { position: fixed; z-index: 51; right: 24px; bottom: 24px; display: grid; width: min(440px, calc(100vw - 48px)); gap: 14px; padding: 22px; border: 1px solid #302e32; border-radius: 20px; background: rgba(20, 20, 20, .98); box-shadow: 0 22px 56px rgba(0, 0, 0, .38); backdrop-filter: blur(18px); }
+  .fatto-consent-copy p { margin: 0; color: #b7b4b8; font-size: 15px; line-height: 1.48; letter-spacing: -.025em; }
   .fatto-consent-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
-  .fatto-consent-actions button { min-height: 44px; padding: 10px 16px; border-radius: 9px; font: inherit; font-size: 12px; font-weight: 550; white-space: nowrap; cursor: pointer; transition: background 180ms ease, border-color 180ms ease, color 180ms ease; }
+  .fatto-consent-actions button { min-height: 46px; padding: 10px 16px; border-radius: 11px; font: inherit; font-size: 13px; font-weight: 400; white-space: nowrap; cursor: pointer; transition: background 180ms ease, border-color 180ms ease, color 180ms ease; }
   .fatto-consent-actions.is-preferences { grid-template-columns: 1fr; }
-  .fatto-consent-accept { border: 1px solid var(--accent); background: var(--accent); color: #fff; }
+  .fatto-consent-accept { border: 1px solid var(--accent); background: var(--accent); color: #fff; font-weight: 600 !important; }
   .fatto-consent-accept:hover, .fatto-consent-accept:focus-visible { background: #f70f39; border-color: #f70f39; }
   .fatto-consent-decline { border: 1px solid #343236; background: transparent; color: var(--muted); }
-  .fatto-consent-actions .fatto-consent-decline { border: 1px solid #343236; background: transparent; color: var(--muted); font-weight: 200; font-synthesis: none; }
+  .fatto-consent-actions .fatto-consent-decline { border: 1px solid #343236; background: transparent; color: var(--muted); font-weight: 400; }
   .fatto-consent-decline:hover, .fatto-consent-decline:focus-visible { border-color: #5b575d; color: var(--text); }
-  .fatto-cookie-choice { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 15px 16px; border: 1px solid #2a292c; border-radius: 12px; background: #171717; }
-  .fatto-cookie-choice div { display: grid; gap: 4px; }
-  .fatto-cookie-choice strong { color: var(--text); font-size: 14px; font-weight: 550; }
-  .fatto-cookie-choice span { color: var(--muted); font-size: 12px; }
-  .fatto-cookie-choice button { position: relative; flex: 0 0 auto; width: 40px; height: 22px; padding: 0; border: 1px solid #454248; border-radius: 99px; background: #2a292c; cursor: pointer; transition: background 180ms ease, border-color 180ms ease; }
-  .fatto-cookie-choice button > span { position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 99px; background: var(--muted); transition: transform 180ms ease, background 180ms ease; }
-  .fatto-cookie-choice button.is-enabled { border-color: var(--accent); background: var(--accent); }
-  .fatto-cookie-choice button.is-enabled > span { background: #fff; transform: translateX(18px); }
+  .fatto-cookie-options { display: grid; gap: 8px; }
+  .fatto-cookie-option { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: start; gap: 12px; padding: 13px 14px; border: 1px solid #302e32; border-radius: 14px; background: #171717; cursor: pointer; transition: border-color 180ms ease, background 180ms ease; }
+  .fatto-cookie-option:hover { border-color: #4e4950; background: #1b1b1b; }
+  .fatto-cookie-option.is-required { cursor: default; opacity: .72; }
+  .fatto-cookie-option.is-required:hover { border-color: #302e32; background: #171717; }
+  .fatto-cookie-option input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--accent); cursor: pointer; }
+  .fatto-cookie-option input:disabled { cursor: default; }
+  .fatto-cookie-option > span { display: grid; gap: 3px; }
+  .fatto-cookie-option strong { color: var(--text); font-size: 14px; font-weight: 540; letter-spacing: -.02em; }
+  .fatto-cookie-option small { color: var(--muted); font-size: 12px; line-height: 1.35; letter-spacing: -.015em; }
 
   @media (max-width: 900px) {
     .fatto-hero { min-height: 660px; padding-inline: clamp(32px, 8vw, 80px); }
@@ -860,9 +911,6 @@ const styles = `
     .fatto-consent-actions.is-preferences { grid-template-columns: 1fr; }
     .fatto-consent-actions button { width: 100%; }
 
-    .fatto-hero { min-height: 292px; align-items: flex-start; padding: 42px 22px 28px; border-bottom: 0; }
-    .fatto-hero::before { background: radial-gradient(ellipse 150% 120% at 108% 18%, rgba(255, 91, 126, .32) 0%, rgba(214, 35, 76, .18) 30%, rgba(125, 18, 45, .07) 54%, transparent 79%), radial-gradient(ellipse 88% 58% at 100% 108%, rgba(255, 91, 126, .27) 0%, rgba(214, 35, 76, .14) 43%, rgba(125, 18, 45, .06) 64%, transparent 80%), linear-gradient(150deg, transparent 42%, rgba(207, 35, 76, .10) 67%, rgba(173, 27, 64, .12) 100%), linear-gradient(180deg, transparent 36%, var(--bg) 94%); }
-    .fatto-hero::after { opacity: .11; }
     /* Mobile keeps the original hard transition: hero gradient, then solid black Products. */
     .fatto-hero { min-height: auto; align-items: flex-start; padding: 42px 22px; border-bottom: 0 !important; background: var(--bg); }
     .fatto-hero::before {
@@ -888,7 +936,6 @@ const styles = `
     .is-ready .fatto-hero-signal-line { transform: scaleY(1); }
 
     .fatto-section { gap: 30px; padding: 58px 22px; }
-    .fatto-products { padding-top: 46px; }
     .fatto-products { margin-top: 0; padding-top: 50px; border-top: 0 !important; box-shadow: none; background: var(--bg); }
     .fatto-section-heading { display: block; }
     .fatto-section-index { display: none; }
@@ -913,7 +960,6 @@ const styles = `
     .fatto-beliefs-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-left: 0; }
     .fatto-beliefs-list li { min-height: 178px; gap: 15px; padding: 17px; border-radius: 14px; }
     .fatto-beliefs-list li > span { padding-top: 0; color: var(--quiet); font-size: 11px; }
-    .fatto-beliefs-list p { margin: 15px 0 0; font-size: clamp(19px, 5.2vw, 22px); font-weight: 420; line-height: 1.18; letter-spacing: -.045em; }
     .fatto-beliefs-list p { margin: 15px 0 0; font-size: clamp(18px, 5vw, 21px); font-weight: 500; line-height: 1.18; letter-spacing: -.045em; }
 
     .fatto-footer-inner { grid-template-columns: minmax(0, 1fr) auto; width: 100%; gap: 16px; padding: 30px 28px; }
