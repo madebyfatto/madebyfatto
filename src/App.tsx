@@ -8,7 +8,7 @@ type Gtag = (...args: unknown[]) => void
 type Clarity = (...args: unknown[]) => void
 
 // Replace these placeholder values with the production identifiers before publishing.
-const GA_MEASUREMENT_ID = "G-XXXXXXXXXX"
+const GA_MEASUREMENT_ID = "G-YB5ZBL0Z02"
 const CLARITY_PROJECT_ID = "XXXXXXXXXX"
 const CONSENT_STORAGE_KEY = "fatto-analytics-consent"
 const COOKIE_PREFERENCES_STORAGE_KEY = "fatto-cookie-preferences"
@@ -500,42 +500,54 @@ export default function App() {
       )}
 
       {consentBannerOpen ? (
-        <section className="fatto-consent-banner" role="dialog" aria-label={copy.consent.dialog} aria-modal="false">
+        <section className={`fatto-consent-banner ${cookiePreferencesOpen ? "is-preferences" : "is-summary"}`} role="dialog" aria-label={copy.consent.dialog} aria-modal="false">
           {cookiePreferencesOpen ? (
             <>
               <div className="fatto-consent-copy">
                 <p>{copy.consent.preferencesIntro}</p>
               </div>
               <div className="fatto-cookie-options">
-                <label className="fatto-cookie-option is-required">
-                  <input type="checkbox" checked disabled />
+                <div className="fatto-cookie-option is-required">
+                  <button className="fatto-cookie-switch is-active" type="button" role="switch" aria-checked="true" aria-label={copy.consent.requiredTitle} disabled>
+                    <span aria-hidden="true" />
+                  </button>
                   <span>
                     <strong>{copy.consent.requiredTitle}</strong>
                     <small>{copy.consent.requiredDescription}</small>
                   </span>
-                </label>
-                <label className="fatto-cookie-option">
-                  <input
-                    type="checkbox"
-                    checked={cookiePreferences.analytics}
-                    onChange={(event) => setCookiePreferences((preferences) => ({ ...preferences, analytics: event.target.checked }))}
-                  />
+                </div>
+                <div className="fatto-cookie-option">
+                  <button
+                    className={`fatto-cookie-switch ${cookiePreferences.analytics ? "is-active" : ""}`}
+                    type="button"
+                    role="switch"
+                    aria-checked={cookiePreferences.analytics}
+                    aria-label={copy.consent.analyticsTitle}
+                    onClick={() => setCookiePreferences((preferences) => ({ ...preferences, analytics: !preferences.analytics }))}
+                  >
+                    <span aria-hidden="true" />
+                  </button>
                   <span>
                     <strong>{copy.consent.analyticsTitle}</strong>
                     <small>{copy.consent.analyticsDescription}</small>
                   </span>
-                </label>
-                <label className="fatto-cookie-option">
-                  <input
-                    type="checkbox"
-                    checked={cookiePreferences.marketing}
-                    onChange={(event) => setCookiePreferences((preferences) => ({ ...preferences, marketing: event.target.checked }))}
-                  />
+                </div>
+                <div className="fatto-cookie-option">
+                  <button
+                    className={`fatto-cookie-switch ${cookiePreferences.marketing ? "is-active" : ""}`}
+                    type="button"
+                    role="switch"
+                    aria-checked={cookiePreferences.marketing}
+                    aria-label={copy.consent.marketingTitle}
+                    onClick={() => setCookiePreferences((preferences) => ({ ...preferences, marketing: !preferences.marketing }))}
+                  >
+                    <span aria-hidden="true" />
+                  </button>
                   <span>
                     <strong>{copy.consent.marketingTitle}</strong>
                     <small>{copy.consent.marketingDescription}</small>
                   </span>
-                </label>
+                </div>
               </div>
               <div className="fatto-consent-actions is-preferences">
                 <button className="fatto-consent-decline" type="button" onClick={() => setCookiePreferencesOpen(false)}>{copy.consent.back}</button>
@@ -594,7 +606,7 @@ const styles = `
     backdrop-filter: blur(16px);
   }
 
-  .fatto-header-inner { display: flex; width: min(calc(100% - 48px), 1280px); height: 100%; align-items: center; justify-content: space-between; margin: 0 auto; }
+  .fatto-header-inner { display: flex; width: min(calc(100% - 48px), 1160px); height: 100%; align-items: center; justify-content: space-between; margin: 0 auto; }
 
   .fatto-header-logo { display: inline-flex; align-items: center; }
   .fatto-header-logo img { display: block; width: auto; height: 21px; }
@@ -845,36 +857,70 @@ const styles = `
   .fatto-beliefs-list strong { color: var(--text); font-weight: 650; }
 
   .fatto-footer { border-top: 1px solid var(--line); }
-  .fatto-footer-inner { display: grid; grid-template-columns: 1fr auto; width: min(calc(100% - 48px), 1280px); align-items: center; gap: 24px; margin: 0 auto; padding: 32px 0; }
+  .fatto-footer-inner { display: grid; grid-template-columns: 1fr auto; width: min(calc(100% - 48px), 1160px); align-items: center; gap: 24px; margin: 0 auto; padding: 32px 0; }
   .fatto-footer-company { display: grid; gap: 5px; justify-self: start; }
   .fatto-footer p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.35; }
   .fatto-footer-company p:first-child { color: var(--text); }
   .fatto-copyright { justify-self: end; color: var(--quiet) !important; }
 
-  .fatto-privacy-settings { position: fixed; z-index: 50; right: 20px; bottom: 20px; padding: 8px 11px; border: 1px solid #2a292c; border-radius: 999px; background: rgba(20, 20, 20, .92); color: var(--muted); font: inherit; font-size: 11px; letter-spacing: -.01em; cursor: pointer; backdrop-filter: blur(12px); transition: border-color 180ms ease, color 180ms ease, background 180ms ease; }
-  .fatto-privacy-settings:hover, .fatto-privacy-settings:focus-visible { border-color: #4a474d; background: #1a1a1a; color: var(--text); }
-  .fatto-consent-banner { position: fixed; z-index: 51; right: 24px; bottom: 24px; display: grid; width: min(440px, calc(100vw - 48px)); gap: 14px; padding: 22px; border: 1px solid #302e32; border-radius: 20px; background: rgba(20, 20, 20, .98); box-shadow: 0 22px 56px rgba(0, 0, 0, .38); backdrop-filter: blur(18px); }
-  .fatto-consent-copy p { margin: 0; color: #b7b4b8; font-size: 15px; line-height: 1.48; letter-spacing: -.025em; }
-  .fatto-consent-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .fatto-consent-actions button { min-height: 50px; padding: 10px 16px; border-radius: 11px; font: inherit; font-size: 14px; font-weight: 400; line-height: 1.15; white-space: normal; cursor: pointer; transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
-  .fatto-consent-actions.is-preferences { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fatto-privacy-settings { position: fixed; z-index: 50; right: 20px; bottom: 20px; display: inline-flex; min-height: 36px; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid rgba(255, 255, 255, .15); border-radius: 999px; background: rgba(25, 25, 27, .66); box-shadow: 0 10px 30px rgba(0, 0, 0, .26), inset 0 1px rgba(255, 255, 255, .05); color: #d1ced3; font: inherit; font-size: 12px; font-weight: 450; letter-spacing: -.015em; cursor: pointer; backdrop-filter: blur(22px) saturate(150%); transition: border-color 180ms ease, color 180ms ease, background 180ms ease, transform 180ms ease; }
+  .fatto-privacy-settings::before { width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(255, 29, 67, .15), 0 0 10px rgba(255, 29, 67, .36); content: ""; transition: transform 180ms ease, box-shadow 180ms ease; }
+  .fatto-privacy-settings:hover, .fatto-privacy-settings:focus-visible { border-color: rgba(255, 255, 255, .28); background: rgba(42, 42, 44, .78); color: var(--text); transform: translateY(-1px); }
+  .fatto-privacy-settings:hover::before, .fatto-privacy-settings:focus-visible::before { box-shadow: 0 0 0 4px rgba(255, 29, 67, .16), 0 0 12px rgba(255, 29, 67, .48); transform: scale(1.08); }
+  .fatto-consent-banner { position: fixed; z-index: 51; right: 28px; bottom: 28px; left: auto; display: grid; width: min(420px, calc(100vw - 56px)); gap: 16px; padding: 20px; overflow: hidden; border: 1px solid rgba(255, 255, 255, .16); border-radius: 24px; background: linear-gradient(145deg, rgba(42, 42, 45, .72), rgba(18, 18, 20, .84)); box-shadow: 0 18px 48px rgba(0, 0, 0, .36), inset 0 1px rgba(255, 255, 255, .10), inset 0 -1px rgba(0, 0, 0, .18); color: var(--text); backdrop-filter: blur(30px) saturate(155%); transform: none; }
+  .fatto-consent-banner::before { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(132deg, rgba(255, 255, 255, .11) 0%, rgba(255, 255, 255, .025) 26%, transparent 52%); content: ""; pointer-events: none; }
+  .fatto-consent-banner > * { position: relative; z-index: 1; }
+  .fatto-consent-banner.is-preferences { width: min(430px, calc(100vw - 56px)); gap: 14px; padding: 20px; border-radius: 24px; }
+  .fatto-consent-copy p { margin: 0; color: #d0cdd2; font-size: 15px; font-weight: 400; line-height: 1.45; letter-spacing: -.025em; }
+  .fatto-consent-banner.is-preferences .fatto-consent-copy p { color: #d3d0d4; font-size: 14px; line-height: 1.42; }
+  .fatto-consent-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .fatto-consent-actions button { min-height: 48px; padding: 9px 12px; border-radius: 13px; font: inherit; font-size: 13px; font-weight: 450; letter-spacing: -.02em; line-height: 1.1; white-space: normal; cursor: pointer; transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+  .fatto-consent-actions.is-preferences { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .fatto-consent-actions.is-preferences button { min-height: 48px; border-radius: 13px; font-size: 13px; }
   .fatto-consent-actions:not(.is-preferences) .fatto-consent-accept { grid-column: 1 / -1; }
-  .fatto-consent-accept { border: 1px solid var(--accent); background: var(--accent); box-shadow: 0 2px 5px rgba(255, 29, 67, .22); color: #fff; font-weight: 600 !important; }
-  .fatto-consent-accept:hover, .fatto-consent-accept:focus-visible { background: #f70f39; border-color: #f70f39; }
-  .fatto-consent-decline { border: 1px solid #3d3a3f; background: #1b1b1b; box-shadow: 0 2px 5px rgba(0, 0, 0, .2); color: #dedadd; }
-  .fatto-consent-actions .fatto-consent-decline { border: 1px solid #3d3a3f; background: #1b1b1b; color: #dedadd; font-weight: 400; }
-  .fatto-consent-decline:hover, .fatto-consent-decline:focus-visible { border-color: #615b63; background: #202020; color: var(--text); }
+  .fatto-consent-accept { border: 1px solid #ff1d43; background: linear-gradient(135deg, #ff1d43, #fa2452); box-shadow: 0 10px 24px rgba(255, 29, 67, .18), inset 0 1px rgba(255, 255, 255, .16); color: #fff; font-weight: 600 !important; }
+  .fatto-consent-accept:hover, .fatto-consent-accept:focus-visible { border-color: #ff5474; background: linear-gradient(135deg, #ff3158, #ff1d43); box-shadow: 0 12px 28px rgba(255, 29, 67, .28), inset 0 1px rgba(255, 255, 255, .18); }
+  .fatto-consent-decline { border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .035); box-shadow: inset 0 1px rgba(255, 255, 255, .04); color: #efedf0; }
+  .fatto-consent-actions .fatto-consent-decline { border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .035); color: #efedf0; font-weight: 450; }
+  .fatto-consent-decline:hover, .fatto-consent-decline:focus-visible { border-color: rgba(255, 255, 255, .30); background: rgba(255, 255, 255, .075); color: #fff; }
   .fatto-consent-actions button:hover { transform: translateY(-1px); }
-  .fatto-cookie-options { display: grid; gap: 8px; }
-  .fatto-cookie-option { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: start; gap: 12px; padding: 13px 14px; border: 1px solid #302e32; border-radius: 14px; background: #171717; cursor: pointer; transition: border-color 180ms ease, background 180ms ease; }
-  .fatto-cookie-option:hover { border-color: #4e4950; background: #1b1b1b; }
-  .fatto-cookie-option.is-required { cursor: default; opacity: .72; }
-  .fatto-cookie-option.is-required:hover { border-color: #302e32; background: #171717; }
-  .fatto-cookie-option input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--accent); cursor: pointer; }
-  .fatto-cookie-option input:disabled { cursor: default; }
-  .fatto-cookie-option > span { display: grid; gap: 3px; }
-  .fatto-cookie-option strong { color: var(--text); font-size: 14px; font-weight: 540; letter-spacing: -.02em; }
-  .fatto-cookie-option small { color: var(--muted); font-size: 12px; line-height: 1.35; letter-spacing: -.015em; }
+  .fatto-cookie-options { display: grid; overflow: hidden; border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px; background: rgba(255, 255, 255, .025); }
+  .fatto-cookie-option { display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: start; gap: 12px; padding: 13px 14px; border-bottom: 1px solid rgba(255, 255, 255, .09); background: transparent; transition: background 180ms ease; }
+  .fatto-cookie-option:last-child { border-bottom: 0; }
+  .fatto-cookie-option:hover { background: rgba(255, 255, 255, .035); }
+  .fatto-cookie-option.is-required { opacity: .64; }
+  .fatto-cookie-option.is-required:hover { background: transparent; }
+  .fatto-cookie-switch { position: relative; width: 34px; height: 20px; margin: 1px 0 0; padding: 0; border: 1px solid rgba(255, 255, 255, .20); border-radius: 999px; background: rgba(255, 255, 255, .12); box-shadow: inset 0 1px rgba(255, 255, 255, .06); cursor: pointer; transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+  .fatto-cookie-switch > span { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #f7f5f6; box-shadow: 0 1px 3px rgba(0, 0, 0, .34); transform: translateX(0); transition: transform 180ms cubic-bezier(.2, .85, .3, 1.18); }
+  .fatto-cookie-switch.is-active { border-color: #ff3154; background: linear-gradient(135deg, #ff3154, #f71943); box-shadow: 0 3px 10px rgba(255, 29, 67, .24), inset 0 1px rgba(255, 255, 255, .16); }
+  .fatto-cookie-switch.is-active > span { transform: translateX(14px); }
+  .fatto-cookie-switch:hover:not(:disabled), .fatto-cookie-switch:focus-visible { border-color: rgba(255, 255, 255, .46); box-shadow: 0 0 0 3px rgba(255, 255, 255, .08), inset 0 1px rgba(255, 255, 255, .10); }
+  .fatto-cookie-switch.is-active:hover:not(:disabled), .fatto-cookie-switch.is-active:focus-visible { border-color: #ff7590; box-shadow: 0 0 0 3px rgba(255, 29, 67, .16), 0 3px 10px rgba(255, 29, 67, .26), inset 0 1px rgba(255, 255, 255, .16); }
+  .fatto-cookie-switch:disabled { cursor: default; }
+  .fatto-cookie-option > span { display: grid; gap: 4px; }
+  .fatto-cookie-option strong { color: #f4f1f3; font-size: 14px; font-weight: 560; letter-spacing: -.03em; }
+  .fatto-cookie-option small { color: #a9a6aa; font-size: 12px; line-height: 1.38; letter-spacing: -.02em; }
+
+  /* Desktop summary is intentionally a small corner notice, not a modal. */
+  @media (min-width: 621px) {
+    .fatto-consent-banner.is-summary { right: 24px; bottom: 24px; width: min(478px, calc(100vw - 48px)); gap: 12px; padding: 16px; border-radius: 18px; }
+    .fatto-consent-banner.is-summary .fatto-consent-copy p { font-size: 13px; line-height: 1.45; letter-spacing: -.02em; }
+    .fatto-consent-banner.is-summary .fatto-consent-actions { grid-template-columns: minmax(0, .9fr) minmax(0, 1.55fr) minmax(0, 1fr); gap: 8px; }
+    .fatto-consent-banner.is-summary .fatto-consent-actions button { min-height: 40px; padding: 8px 9px; border-radius: 10px; font-size: 12px; letter-spacing: -.02em; white-space: nowrap; }
+    .fatto-consent-banner.is-summary .fatto-consent-actions .fatto-consent-accept { grid-column: auto; }
+    .fatto-consent-banner.is-preferences { right: 24px; bottom: 24px; width: min(390px, calc(100vw - 48px)); gap: 10px; padding: 16px; border-radius: 18px; }
+    .fatto-consent-banner.is-preferences .fatto-consent-copy p { font-size: 13px; line-height: 1.4; letter-spacing: -.02em; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-options { border-radius: 13px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option { grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 10px 12px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-switch { width: 30px; height: 18px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-switch > span { width: 12px; height: 12px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-switch.is-active > span { transform: translateX(12px); }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option > span { gap: 2px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option strong { font-size: 13px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option small { font-size: 11px; line-height: 1.32; }
+    .fatto-consent-banner.is-preferences .fatto-consent-actions { gap: 8px; }
+    .fatto-consent-banner.is-preferences .fatto-consent-actions button { min-height: 40px; padding: 8px 10px; border-radius: 10px; font-size: 12px; }
+  }
 
   @media (max-width: 900px) {
     .fatto-hero { min-height: 660px; padding-inline: clamp(32px, 8vw, 80px); }
@@ -911,14 +957,28 @@ const styles = `
     .fatto-language-picker.is-mobile .fatto-language-options button::before { left: 0; }
     .fatto-language-picker.is-mobile .fatto-language-options button { padding: 9px 18px 9px 28px; }
     .fatto-language-picker.is-mobile .fatto-language-options button::before { left: 12px; }
-    .fatto-privacy-settings { right: 14px; bottom: 14px; }
-    .fatto-consent-banner { right: 14px; bottom: 14px; left: 14px; width: auto; gap: 18px; padding: 20px; }
-    .fatto-consent-copy p { font-size: 14px; }
-    .fatto-consent-actions, .fatto-consent-actions.is-preferences { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .fatto-consent-actions button { width: 100%; }
+    .fatto-privacy-settings { right: 14px; bottom: 14px; min-height: 36px; padding-inline: 14px; }
+    .fatto-consent-banner { right: auto; bottom: 12px; left: 12px; width: calc(100vw - 24px); gap: 14px; padding: 18px; border-radius: 20px; transform: none; }
+    .fatto-consent-banner.is-preferences { width: calc(100vw - 24px); gap: 12px; padding: 18px; border-radius: 20px; }
+    .fatto-consent-copy p { font-size: 15px; line-height: 1.43; }
+    .fatto-consent-banner.is-preferences .fatto-consent-copy p { font-size: 15px; line-height: 1.4; }
+    .fatto-consent-actions { grid-template-columns: 1fr; gap: 8px; }
+    .fatto-consent-actions.is-preferences { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .fatto-consent-actions button { width: 100%; min-height: 46px; padding-inline: 10px; border-radius: 12px; font-size: 14px; }
+    .fatto-consent-actions.is-preferences button { min-height: 46px; font-size: 13px; }
+    .fatto-consent-banner.is-summary .fatto-consent-accept { order: -1; }
+    .fatto-consent-banner.is-summary .fatto-consent-accept { grid-column: auto; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-options { border-radius: 14px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option { grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 10px 12px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-switch { width: 30px; height: 18px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-switch > span { width: 12px; height: 12px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-switch.is-active > span { transform: translateX(12px); }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option > span { gap: 2px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option strong { font-size: 14px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option small { font-size: 11px; line-height: 1.32; }
 
     /* Mobile keeps the original hard transition: hero gradient, then solid black Products. */
-    .fatto-hero { min-height: auto; align-items: flex-start; padding: 42px 22px; border-bottom: 0 !important; background: var(--bg); }
+    .fatto-hero { min-height: auto; align-items: flex-start; padding: 78px 22px; border-bottom: 0 !important; background: var(--bg); }
     .fatto-hero::before {
       display: block;
       background:

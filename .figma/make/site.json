@@ -1,13 +1,15 @@
 {
-  "description": "Showcases Fatto's digital products and guiding principles with a sleek, responsive one-page design that highlights innovation and clarity for users.",
-  "robots": {
-    "index": false
-  },
+  "title": "Fatto - Tecnologia para o que vem depois",
+  "description": "Criamos produtos digitais que transformam intenção em progresso. Tecnologia pensada para ampliar autonomia, constância e impacto real.",
+  "language": "pt-BR",
   "icons": {
     "icon": "/.figma/make/favicon.png"
   },
+  "openGraph": {
+    "image": "/.figma/make/social-image.png"
+  },
   "accessibility": {
-    "addBypassLinks": false,
+    "addBypassLinks": true,
     "ignoreReducedMotion": false
   }
 }
