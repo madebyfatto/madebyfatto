@@ -281,6 +281,10 @@ export default function App() {
   const beliefs = copy.beliefs
 
   useEffect(() => {
+    document.title = "Fatto - Tecnologia para o que vem depois"
+  }, [])
+
+  useEffect(() => {
     const frame = window.requestAnimationFrame(() => setHeroReady(true))
     return () => window.cancelAnimationFrame(frame)
   }, [])
