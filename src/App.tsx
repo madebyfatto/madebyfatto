@@ -957,23 +957,23 @@ const styles = `
 
   /* Desktop summary is intentionally a small corner notice, not a modal. */
   @media (min-width: 621px) {
-    .fatto-consent-banner.is-summary { right: 20px; bottom: 20px; width: min(368px, calc(100vw - 40px)); gap: 10px; padding: 14px; border-radius: 16px; }
-    .fatto-consent-banner.is-summary .fatto-consent-copy p { font-size: 12px; line-height: 1.4; letter-spacing: -.02em; }
-    .fatto-consent-banner.is-summary .fatto-consent-actions { grid-template-columns: minmax(0, .86fr) minmax(0, 1.48fr) minmax(0, .98fr); gap: 7px; }
-    .fatto-consent-banner.is-summary .fatto-consent-actions button { min-height: 36px; padding: 7px 7px; border-radius: 9px; font-size: 11px; letter-spacing: -.025em; white-space: nowrap; }
+    .fatto-consent-banner.is-summary { right: 24px; bottom: 24px; width: min(444px, calc(100vw - 48px)); gap: 13px; padding: 18px; border-radius: 19px; }
+    .fatto-consent-banner.is-summary .fatto-consent-copy p { font-size: 14px; line-height: 1.45; letter-spacing: -.022em; }
+    .fatto-consent-banner.is-summary .fatto-consent-actions { grid-template-columns: minmax(0, .88fr) minmax(0, 1.52fr) minmax(0, 1.04fr); gap: 8px; }
+    .fatto-consent-banner.is-summary .fatto-consent-actions button { min-height: 44px; padding: 8px 9px; border-radius: 11px; font-size: 12.5px; letter-spacing: -.022em; white-space: nowrap; }
     .fatto-consent-banner.is-summary .fatto-consent-actions .fatto-consent-accept { grid-column: auto; }
-    .fatto-consent-banner.is-preferences { right: 20px; bottom: 20px; width: min(368px, calc(100vw - 40px)); gap: 9px; padding: 14px; border-radius: 16px; }
-    .fatto-consent-banner.is-preferences .fatto-consent-copy p { font-size: 12px; line-height: 1.38; letter-spacing: -.02em; }
-    .fatto-consent-banner.is-preferences .fatto-cookie-options { border-radius: 13px; }
-    .fatto-consent-banner.is-preferences .fatto-cookie-option { grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 10px 12px; }
-    .fatto-consent-banner.is-preferences .fatto-cookie-switch { width: 30px; height: 18px; }
-    .fatto-consent-banner.is-preferences .fatto-cookie-switch > span { width: 12px; height: 12px; }
-    .fatto-consent-banner.is-preferences .fatto-cookie-switch.is-active > span { transform: translateX(12px); }
-    .fatto-consent-banner.is-preferences .fatto-cookie-option > span { gap: 2px; }
-    .fatto-consent-banner.is-preferences .fatto-cookie-option strong { font-size: 13px; }
-    .fatto-consent-banner.is-preferences .fatto-cookie-option small { font-size: 11px; line-height: 1.32; }
-    .fatto-consent-banner.is-preferences .fatto-consent-actions { gap: 8px; }
-    .fatto-consent-banner.is-preferences .fatto-consent-actions button { min-height: 40px; padding: 8px 10px; border-radius: 10px; font-size: 12px; }
+    .fatto-consent-banner.is-preferences { right: 24px; bottom: 24px; width: min(444px, calc(100vw - 48px)); gap: 12px; padding: 18px; border-radius: 19px; }
+    .fatto-consent-banner.is-preferences .fatto-consent-copy p { font-size: 14px; line-height: 1.42; letter-spacing: -.02em; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-options { border-radius: 15px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option { grid-template-columns: 34px minmax(0, 1fr); gap: 11px; padding: 12px 14px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-switch { width: 34px; height: 20px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-switch > span { width: 14px; height: 14px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-switch.is-active > span { transform: translateX(14px); }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option > span { gap: 3px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option strong { font-size: 14px; }
+    .fatto-consent-banner.is-preferences .fatto-cookie-option small { font-size: 12px; line-height: 1.36; }
+    .fatto-consent-banner.is-preferences .fatto-consent-actions { gap: 9px; }
+    .fatto-consent-banner.is-preferences .fatto-consent-actions button { min-height: 44px; padding: 8px 11px; border-radius: 11px; font-size: 13px; }
   }
 
   @media (max-width: 900px) {
