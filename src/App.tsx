@@ -688,16 +688,26 @@ const styles = `
 
   .fatto-menu-button, .fatto-mobile-nav { display: none; }
 
+  /* One shared atmospheric field prevents sections from reading as separate panels. */
+  main {
+    position: relative;
+    isolation: isolate;
+    background:
+      radial-gradient(ellipse 108% 740px at 88% 300px, rgba(137, 18, 49, .14) 0%, rgba(73, 10, 30, .065) 40%, rgba(38, 8, 20, .025) 58%, transparent 76%),
+      radial-gradient(ellipse 104% 760px at 14% 1640px, rgba(137, 20, 52, .19) 0%, rgba(72, 12, 34, .088) 41%, rgba(37, 8, 20, .034) 59%, transparent 79%),
+      var(--bg);
+  }
+
   .fatto-hero {
     position: relative;
     display: flex;
     min-height: min(760px, calc(100svh - 76px));
     align-items: center;
     padding: clamp(72px, 10vw, 164px) clamp(24px, 12vw, 252px) clamp(84px, 9vw, 148px);
-    border-bottom: 1px solid var(--line);
+    border-bottom: 0;
     overflow: hidden;
     padding: clamp(72px, 10vw, 164px) clamp(24px, 12vw, 252px) clamp(56px, 6.5vw, 104px);
-    background: var(--bg);
+    background: transparent;
   }
 
   .fatto-hero::before {
@@ -705,10 +715,11 @@ const styles = `
     inset: 0;
     z-index: 0;
     background:
-      radial-gradient(ellipse 86% 116% at 106% 17%, rgba(255, 91, 126, .38) 0%, rgba(214, 35, 76, .22) 30%, rgba(125, 18, 45, .09) 54%, transparent 79%),
-      radial-gradient(ellipse 64% 62% at 100% 106%, rgba(255, 91, 126, .32) 0%, rgba(214, 35, 76, .17) 43%, rgba(125, 18, 45, .08) 64%, transparent 80%),
-      linear-gradient(148deg, transparent 40%, rgba(207, 35, 76, .13) 65%, rgba(173, 27, 64, .14) 100%),
-      linear-gradient(180deg, transparent 34%, var(--bg) 94%);
+      linear-gradient(180deg, transparent 0%, transparent 46%, rgba(9, 9, 9, .12) 63%, rgba(9, 9, 9, .48) 79%, var(--bg) 100%),
+      radial-gradient(ellipse 82% 104% at 106% 15%, rgba(255, 91, 126, .32) 0%, rgba(214, 35, 76, .17) 28%, rgba(125, 18, 45, .055) 48%, transparent 69%),
+      radial-gradient(ellipse 58% 54% at 100% 94%, rgba(255, 91, 126, .20) 0%, rgba(214, 35, 76, .09) 38%, rgba(125, 18, 45, .035) 54%, transparent 70%),
+      linear-gradient(148deg, transparent 36%, rgba(207, 35, 76, .075) 61%, rgba(173, 27, 64, .07) 84%, transparent 100%),
+      linear-gradient(180deg, rgba(9, 9, 9, 0) 18%, rgba(9, 9, 9, .08) 48%, rgba(9, 9, 9, .24) 67%, rgba(9, 9, 9, .62) 84%, var(--bg) 100%);
     content: "";
     pointer-events: none;
   }
@@ -826,8 +837,15 @@ const styles = `
   .fatto-section-heading h2 { margin: 0; color: var(--text); font-size: clamp(28px, 2.2vw, 38px); font-weight: 540; letter-spacing: -0.055em; line-height: 0.98; white-space: nowrap; }
   .fatto-section-heading div > p { margin: 22px 0 0; color: var(--muted); font-size: clamp(17px, 1.45vw, 23px); letter-spacing: -0.03em; line-height: 1.25; white-space: nowrap; }
   .fatto-products {
+    position: relative;
+    isolation: isolate;
     padding-top: clamp(72px, 7vw, 112px);
+    overflow: hidden;
   }
+  .fatto-products::before {
+    display: none;
+  }
+  .fatto-products > * { position: relative; z-index: 1; }
 
   [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity 600ms ease, transform 850ms cubic-bezier(.16, 1, .3, 1); }
   [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
@@ -875,7 +893,17 @@ const styles = `
     .fatto-alvi-card:hover .fatto-route-three { transform: translate(-12px, 10px) scale(.9); }
   }
 
-  .fatto-beliefs { border-top: 1px solid var(--line); padding-block: clamp(96px, 8vw, 144px); }
+  .fatto-beliefs {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-top: 0;
+    padding-block: clamp(112px, 9vw, 156px);
+  }
+  .fatto-beliefs::before {
+    display: none;
+  }
+  .fatto-beliefs > * { position: relative; z-index: 1; }
   .fatto-beliefs-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0 0 0 clamp(48px, 4vw, 76px); padding: 0; list-style: none; }
   .fatto-beliefs-list li { display: flex; min-height: 0; flex-direction: column; gap: 0; padding: clamp(22px, 1.8vw, 28px); border: 1px solid #202024; border-radius: 16px; background: #121212; }
   .fatto-beliefs-list li > span { color: var(--quiet); font-size: 13px; font-variant-numeric: tabular-nums; }
@@ -929,13 +957,13 @@ const styles = `
 
   /* Desktop summary is intentionally a small corner notice, not a modal. */
   @media (min-width: 621px) {
-    .fatto-consent-banner.is-summary { right: 24px; bottom: 24px; width: min(478px, calc(100vw - 48px)); gap: 12px; padding: 16px; border-radius: 18px; }
-    .fatto-consent-banner.is-summary .fatto-consent-copy p { font-size: 13px; line-height: 1.45; letter-spacing: -.02em; }
-    .fatto-consent-banner.is-summary .fatto-consent-actions { grid-template-columns: minmax(0, .9fr) minmax(0, 1.55fr) minmax(0, 1fr); gap: 8px; }
-    .fatto-consent-banner.is-summary .fatto-consent-actions button { min-height: 40px; padding: 8px 9px; border-radius: 10px; font-size: 12px; letter-spacing: -.02em; white-space: nowrap; }
+    .fatto-consent-banner.is-summary { right: 20px; bottom: 20px; width: min(368px, calc(100vw - 40px)); gap: 10px; padding: 14px; border-radius: 16px; }
+    .fatto-consent-banner.is-summary .fatto-consent-copy p { font-size: 12px; line-height: 1.4; letter-spacing: -.02em; }
+    .fatto-consent-banner.is-summary .fatto-consent-actions { grid-template-columns: minmax(0, .86fr) minmax(0, 1.48fr) minmax(0, .98fr); gap: 7px; }
+    .fatto-consent-banner.is-summary .fatto-consent-actions button { min-height: 36px; padding: 7px 7px; border-radius: 9px; font-size: 11px; letter-spacing: -.025em; white-space: nowrap; }
     .fatto-consent-banner.is-summary .fatto-consent-actions .fatto-consent-accept { grid-column: auto; }
-    .fatto-consent-banner.is-preferences { right: 24px; bottom: 24px; width: min(390px, calc(100vw - 48px)); gap: 10px; padding: 16px; border-radius: 18px; }
-    .fatto-consent-banner.is-preferences .fatto-consent-copy p { font-size: 13px; line-height: 1.4; letter-spacing: -.02em; }
+    .fatto-consent-banner.is-preferences { right: 20px; bottom: 20px; width: min(368px, calc(100vw - 40px)); gap: 9px; padding: 14px; border-radius: 16px; }
+    .fatto-consent-banner.is-preferences .fatto-consent-copy p { font-size: 12px; line-height: 1.38; letter-spacing: -.02em; }
     .fatto-consent-banner.is-preferences .fatto-cookie-options { border-radius: 13px; }
     .fatto-consent-banner.is-preferences .fatto-cookie-option { grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 10px 12px; }
     .fatto-consent-banner.is-preferences .fatto-cookie-switch { width: 30px; height: 18px; }
@@ -984,14 +1012,14 @@ const styles = `
     .fatto-language-picker.is-mobile .fatto-language-options button { padding: 9px 18px 9px 28px; }
     .fatto-language-picker.is-mobile .fatto-language-options button::before { left: 12px; }
     .fatto-privacy-settings { right: 14px; bottom: 14px; min-height: 36px; padding-inline: 14px; }
-    .fatto-consent-banner { right: auto; bottom: 12px; left: 12px; width: calc(100vw - 24px); gap: 14px; padding: 18px; border-radius: 20px; transform: none; }
-    .fatto-consent-banner.is-preferences { width: calc(100vw - 24px); gap: 12px; padding: 18px; border-radius: 20px; }
-    .fatto-consent-copy p { font-size: 15px; line-height: 1.43; }
-    .fatto-consent-banner.is-preferences .fatto-consent-copy p { font-size: 15px; line-height: 1.4; }
-    .fatto-consent-actions { grid-template-columns: 1fr; gap: 8px; }
+    .fatto-consent-banner { right: auto; bottom: 14px; left: 50%; width: min(408px, calc(100vw - 28px)); gap: 12px; padding: 16px; border-radius: 18px; background: linear-gradient(145deg, rgba(38, 38, 42, .74), rgba(18, 18, 20, .78)); transform: translateX(-50%); }
+    .fatto-consent-banner.is-preferences { width: min(408px, calc(100vw - 28px)); gap: 10px; padding: 16px; border-radius: 18px; }
+    .fatto-consent-copy p { font-size: 14px; line-height: 1.38; }
+    .fatto-consent-banner.is-preferences .fatto-consent-copy p { font-size: 14px; line-height: 1.38; }
+    .fatto-consent-actions { grid-template-columns: 1fr; gap: 7px; }
     .fatto-consent-actions.is-preferences { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-    .fatto-consent-actions button { width: 100%; min-height: 46px; padding-inline: 10px; border-radius: 12px; font-size: 14px; }
-    .fatto-consent-actions.is-preferences button { min-height: 46px; font-size: 13px; }
+    .fatto-consent-actions button { width: 100%; min-height: 42px; padding-inline: 10px; border-radius: 11px; font-size: 13px; }
+    .fatto-consent-actions.is-preferences button { min-height: 42px; font-size: 13px; }
     .fatto-consent-banner.is-summary .fatto-consent-accept { order: -1; }
     .fatto-consent-banner.is-summary .fatto-consent-accept { grid-column: auto; }
     .fatto-consent-banner.is-preferences .fatto-cookie-options { border-radius: 14px; }
@@ -1003,15 +1031,16 @@ const styles = `
     .fatto-consent-banner.is-preferences .fatto-cookie-option strong { font-size: 14px; }
     .fatto-consent-banner.is-preferences .fatto-cookie-option small { font-size: 11px; line-height: 1.32; }
 
-    /* Mobile keeps the original hard transition: hero gradient, then solid black Products. */
-    .fatto-hero { min-height: auto; align-items: flex-start; padding: 78px 22px; border-bottom: 0 !important; background: var(--bg); }
-    .fatto-hero::before {
-      display: block;
+    /* Equal vertical padding creates calm rhythm without making the opening oversized. */
+    main {
       background:
-        radial-gradient(ellipse 150% 120% at 108% 18%, rgba(255, 91, 126, .32) 0%, rgba(214, 35, 76, .18) 30%, rgba(125, 18, 45, .07) 54%, transparent 79%),
-        radial-gradient(ellipse 88% 58% at 100% 108%, rgba(255, 91, 126, .27) 0%, rgba(214, 35, 76, .14) 43%, rgba(125, 18, 45, .06) 64%, transparent 80%),
-        linear-gradient(150deg, transparent 42%, rgba(207, 35, 76, .10) 67%, rgba(173, 27, 64, .12) 100%),
-        linear-gradient(180deg, transparent 36%, #4a1726 100%);
+        radial-gradient(ellipse 196% 1160px at 104% 82px, rgba(169, 26, 61, .27) 0%, rgba(104, 15, 42, .145) 33%, rgba(50, 9, 25, .065) 51%, rgba(27, 7, 16, .022) 66%, transparent 80%),
+        radial-gradient(ellipse 168% 720px at 12% 1220px, rgba(139, 20, 53, .20) 0%, rgba(73, 12, 35, .09) 40%, rgba(38, 8, 20, .034) 58%, transparent 80%),
+        var(--bg);
+    }
+    .fatto-hero { min-height: auto; align-items: flex-start; padding: 122px 22px; overflow: hidden; border-bottom: 0 !important; background: transparent; }
+    .fatto-hero::before {
+      display: none;
     }
     .fatto-hero::after { display: block; opacity: .11; }
     .fatto-hero-inner { padding: 0 0 0 22px; }
@@ -1028,7 +1057,13 @@ const styles = `
     .is-ready .fatto-hero-signal-line { transform: scaleY(1); }
 
     .fatto-section { gap: 30px; padding: 58px 22px; }
-    .fatto-products { margin-top: 0; padding-top: 50px; border-top: 0 !important; box-shadow: none; background: var(--bg); }
+    .fatto-products {
+      margin-top: 0;
+      padding-top: 42px;
+      border-top: 0 !important;
+      box-shadow: none;
+      background: transparent;
+    }
     .fatto-section-heading { display: block; }
     .fatto-section-index { display: none; }
     .fatto-section-heading h2 { font-size: 29px; font-weight: 540; white-space: normal; }
@@ -1048,7 +1083,7 @@ const styles = `
     .fatto-route-two { top: 13%; right: 26%; width: 64%; }
     .fatto-route-three { right: -8%; bottom: -54%; width: 55%; }
 
-    .fatto-beliefs { gap: 28px; padding: 58px 22px 64px; }
+    .fatto-beliefs { gap: 28px; margin-top: 0; padding: 82px 22px; }
     .fatto-beliefs-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-left: 0; }
     .fatto-beliefs-list li { min-height: 178px; gap: 15px; padding: 17px; border-radius: 14px; }
     .fatto-beliefs-list li > span { padding-top: 0; color: var(--quiet); font-size: 11px; }
