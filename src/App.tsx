@@ -20,14 +20,15 @@ type CookiePreferences = {
 
 declare global {
   interface Window {
-    dataLayer?: unknown[][]
+    dataLayer?: unknown[]
     gtag?: Gtag
     clarity?: Clarity & { q?: unknown[][] }
     [key: `ga-disable-${string}`]: boolean | undefined
   }
 }
 
-let googleAnalyticsLoaded = false
+let googleAnalyticsInitialized = false
+let analyticsEnabled = false
 let clarityLoaded = false
 
 function isBrowser() {
@@ -91,7 +92,9 @@ function hasConfiguredClarityId() {
 
 function getGtag(): Gtag {
   window.dataLayer = window.dataLayer || []
-  window.gtag = window.gtag || ((...args: unknown[]) => window.dataLayer?.push(args))
+  window.gtag = window.gtag || function gtag(..._args: unknown[]) {
+    window.dataLayer?.push(arguments)
+  }
   return window.gtag
 }
 
@@ -113,20 +116,22 @@ function appendScript(id: string, source: string) {
   document.head.appendChild(script)
 }
 
+function appendGoogleAnalyticsScript() {
+  const source = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
+  const scriptAlreadyExists = Array.from(document.scripts).some((script) => script.src === source)
+
+  if (!scriptAlreadyExists) appendScript("fatto-google-analytics", source)
+}
+
 function applyAnalyticsConsent(consent: AnalyticsConsent) {
   if (!isBrowser()) return
 
   if (consent === "granted") {
     if (hasConfiguredGoogleAnalyticsId()) {
+      const wasAnalyticsEnabled = analyticsEnabled
+      analyticsEnabled = true
       window[`ga-disable-${GA_MEASUREMENT_ID}`] = false
       const gtag = getGtag()
-
-      if (!googleAnalyticsLoaded) {
-        gtag("js", new Date())
-        gtag("config", GA_MEASUREMENT_ID, { anonymize_ip: true, send_page_view: true })
-        appendScript("fatto-google-analytics", `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`)
-        googleAnalyticsLoaded = true
-      }
 
       gtag("consent", "update", {
         ad_storage: "denied",
@@ -134,6 +139,21 @@ function applyAnalyticsConsent(consent: AnalyticsConsent) {
         ad_personalization: "denied",
         analytics_storage: "granted",
       })
+
+      if (!googleAnalyticsInitialized) {
+        appendGoogleAnalyticsScript()
+        gtag("js", new Date())
+        gtag("config", GA_MEASUREMENT_ID, { send_page_view: false })
+        googleAnalyticsInitialized = true
+      }
+
+      if (!wasAnalyticsEnabled) {
+        gtag("event", "page_view", {
+          page_title: document.title,
+          page_location: window.location.href,
+          page_path: `${window.location.pathname}${window.location.search}`,
+        })
+      }
     }
 
     if (hasConfiguredClarityId()) {
@@ -149,6 +169,8 @@ function applyAnalyticsConsent(consent: AnalyticsConsent) {
     return
   }
 
+  analyticsEnabled = false
+
   if (hasConfiguredGoogleAnalyticsId()) {
     window[`ga-disable-${GA_MEASUREMENT_ID}`] = true
     window.gtag?.("consent", "update", {
@@ -163,7 +185,7 @@ function applyAnalyticsConsent(consent: AnalyticsConsent) {
 }
 
 function trackAnalyticsEvent(eventName: "click_alvi" | "navigation_products" | "navigation_vision") {
-  if (!isBrowser() || !googleAnalyticsLoaded || !hasConfiguredGoogleAnalyticsId()) return
+  if (!isBrowser() || !analyticsEnabled || !googleAnalyticsInitialized || !hasConfiguredGoogleAnalyticsId()) return
   window.gtag?.("event", eventName)
 }
 
